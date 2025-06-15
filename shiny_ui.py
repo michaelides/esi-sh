@@ -1,6 +1,7 @@
 from shiny import ui
 from shiny.experimental import ui as xui # For accordion
 
+
 def chat_options_modal_ui(chat_id: str, chat_name: str) -> ui.Modal:
     """
     Creates the UI for the chat options modal.
@@ -35,6 +36,7 @@ def delete_chat_confirmation_modal_ui(chat_name: str) -> ui.Modal:
         easy_close=True
     )
 
+
 def get_app_ui():
     """
     Defines the main application UI layout.
@@ -47,7 +49,9 @@ def get_app_ui():
                     ui.input_slider("llm_temperature", "Creativity (Temperature)", min=0, max=1, value=0.7, step=0.1),
                     ui.input_slider("llm_verbosity", "Verbosity", min=1, max=5, value=3, step=1),
                     ui.input_slider("search_results_count", "Number of Search Results", min=1, max=20, value=10, step=1),
+
                     ui.input_switch("long_term_memory_enabled", "Enable Long-term Memory", value=True), # Initial value, server will update from cookie
+
                 ),
                 xui.accordion_panel(
                     "Chat History",
@@ -61,6 +65,7 @@ def get_app_ui():
                                   accept=[".pdf", ".docx", ".md", ".txt", ".csv", ".xlsx", ".sav"]),
                     ui.hr(),
                     ui.output_ui("uploaded_files_output")
+
                 ),
                 xui.accordion_panel(
                     "About ESI",

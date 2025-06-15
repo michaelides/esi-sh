@@ -1,29 +1,3 @@
-# ==============================================================================
-# Original Streamlit App (Commented Out for Reference)
-# ==============================================================================
-"""
-# import streamlit as st
-# import os
-# import json
-# import re
-# import uuid
-# import extra_streamlit_components as esc
-# from typing import List, Dict, Any
-# from llama_index.core.llms import ChatMessage, MessageRole
-# from llama_index.core import Settings
-# import stui
-# from agent import create_orchestrator_agent, generate_suggested_prompts, SUGGESTED_PROMPT_COUNT, DEFAULT_PROMPTS, initialize_settings as initialize_agent_settings, generate_llm_greeting
-# from dotenv import load_dotenv
-# from docx import Document
-# from io import BytesIO
-# import io # Import io module for BytesIO
-# from llama_index.core.tools import FunctionTool # Import FunctionTool
-# from huggingface_hub import HfFileSystem
-"""
-
-# ==============================================================================
-# Shiny App Implementation
-# ==============================================================================
 
 import os
 import json # Used for HF persistence
@@ -45,6 +19,7 @@ except ImportError:
 from shiny import App, ui, render, reactive, Session
 from dotenv import load_dotenv
 from huggingface_hub import HfFileSystem, hf_hub_download # For HF persistence
+
 
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core import Settings
@@ -86,11 +61,13 @@ app_reactive_state_access = {
 
 def setup_global_llm_settings() -> Tuple[bool, str | None]:
     """Initializes global LlamaIndex settings for LLM and embedding models."""
+
     try:
         initialize_agent_settings() # From agent.py
         print("LLM settings initialized successfully.")
         return True, None
     except Exception as e:
+
         print(f"Fatal Error: Could not initialize LLM settings. {e}")
         return False, f"Fatal Error: Could not initialize LLM settings. {e}"
 
@@ -261,7 +238,12 @@ def load_user_data_from_hf_shiny(user_id: str, rv_meta: reactive.Value, rv_all_m
     except Exception as e:
         print(f"Metadata file not found or error for user {user_id} ({meta_fn}): {e}. Initializing empty metadata.")
 
+
+# --- Core Logic Functions (Adapted for Shiny) ---
+def setup_global_llm_settings() -> Tuple[bool, str | None]:
+    print("Attempting to initialize LLM settings...")
     try:
+
         msgs_path = hf_hub_download(HF_USER_MEMORIES_DATASET_ID, msgs_fn, repo_type="dataset", token=hf_token)
         with open(msgs_path, "r") as f: loaded_msgs = json.load(f)
         print(f"All messages loaded for user {user_id}.")
@@ -785,5 +767,6 @@ def server(input: reactive.Input, output: reactive.Output, session: Session):
         return " | ".join(s) if s else "System Ready."
     
     print(f"--- Server Function Initialized for session {session.id} ---")
+
 
 app = App(app_ui, server)
